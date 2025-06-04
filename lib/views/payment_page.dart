@@ -297,7 +297,6 @@ class PaymentPage extends StatelessWidget {
       body: ListView(
         padding: const EdgeInsets.all(16),
         children: [
-          // Card Total Tagihan
           Container(
             padding: const EdgeInsets.all(16),
             decoration: BoxDecoration(
@@ -305,10 +304,10 @@ class PaymentPage extends StatelessWidget {
                 borderRadius: BorderRadius.circular(12),
                 boxShadow: [
                   BoxShadow(
-                    color: Colors.black.withOpacity(0.2), // Warna bayangan
-                    spreadRadius: 2, // Menyebar seberapa jauh dari box
-                    blurRadius: 10, // Seberapa blur bayangannya
-                    offset: const Offset(4, 4), // Posisi bayangan (x, y)
+                    color: Colors.black.withOpacity(0.2), 
+                    spreadRadius: 2,
+                    blurRadius: 10, 
+                    offset: const Offset(4, 4),
                   ),
                 ]),
             child: Column(
