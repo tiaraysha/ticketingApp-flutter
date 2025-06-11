@@ -48,7 +48,6 @@ class HomePage extends StatelessWidget {
                 onPressed: () {
                   Navigator.push(context, MaterialPageRoute(builder: (context) => const TicketPage()
                   ));
-                  // Aksi saat tombol ditekan
                 },
                 style: ElevatedButton.styleFrom(
                   backgroundColor: const Color(0xFF2563EB), // biru

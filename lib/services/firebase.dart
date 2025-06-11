@@ -16,4 +16,15 @@ class FirestoreService {
       'createdAt': Timestamp.now(),
     });
   }
+
+  Future<void> addInstance(String nama, String tipe, String harga, int stok, String ticketId) async {
+    await ticket.doc().set({
+      'nama': nama,
+      'tipe': tipe,
+      'stok': stok,
+      'harga': harga,
+      'ticketId': ticketId,
+      'createdAt': Timestamp.now(),
+    });
+  }
 }

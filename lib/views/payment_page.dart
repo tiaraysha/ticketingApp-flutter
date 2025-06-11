@@ -1,14 +1,37 @@
-import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'payment_struck.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 
 class PaymentPage extends StatelessWidget {
   final Map<String, dynamic> ticketData;
 
-  const PaymentPage({super.key, required this.ticketData});
+  PaymentPage({super.key, required this.ticketData});
 
   @override
+  final CollectionReference ticket =
+      FirebaseFirestore.instance.collection('payment');
+
+  Future<void> addInstance(String nama, String tipe, int stok, String harga, String ticketId) async {
+  if (stok > 0) {
+    await ticket.doc(ticketId).update({
+      'stok': stok - 1,
+    });
+
+    await ticket.add({
+      'nama': nama,
+      'tipe': tipe,
+      'stok': stok,
+      'harga': harga,
+      'ticketId': ticketId,
+      'createdAt': Timestamp.now(),
+    });
+  } else {
+    throw Exception('Stok habis, tidak bisa diproses.');
+  }
+}
+
+
   void cashPopUp(BuildContext context) {
     showDialog(
         context: context,
@@ -56,23 +79,38 @@ class PaymentPage extends StatelessWidget {
                 ),
               ),
               actions: [
-                TextButton(
+                Center(
+                  child: TextButton(
                     style: ButtonStyle(
                       backgroundColor: MaterialStateProperty.all(Colors.blue),
                     ),
-                    child: const Center(
-                        child: Text(
+                    child: const Text(
                       'Konfirmasi Pembayaran',
                       style: TextStyle(
-                          color: Colors.white,
-                          fontWeight: FontWeight.bold,
-                          fontSize: 12),
-                    )),
-                    onPressed: () => Navigator.push(
+                        color: Colors.white,
+                        fontWeight: FontWeight.bold,
+                        fontSize: 12,
+                      ),
+                    ),
+                    onPressed: () async {
+                      // Tambahkan data ke Firestore
+                      await addInstance(
+                        ticketData['nama'],
+                        ticketData['tipe'],
+                        ticketData['stok'],
+                        ticketData['harga'].toString(),
+                        ticketData['id'],
+                      );
+                      Navigator.push(
                         context,
                         MaterialPageRoute(
-                            builder: (context) =>
-                                PaymentStruckPage(ticketData: ticketData)))),
+                          builder: (context) =>
+                              PaymentStruckPage(ticketData: ticketData),
+                        ),
+                      );
+                    },
+                  ),
+                ),
               ],
             ));
   }
@@ -137,13 +175,13 @@ class PaymentPage extends StatelessWidget {
                                 border: Border.all(color: Colors.blue),
                                 borderRadius: BorderRadius.circular(6),
                               ),
-                              
                               child: InkWell(
                                 onTap: () {
-                                   Clipboard.setData(ClipboardData(text: '8810 7766 1234 9876'));
+                                  Clipboard.setData(const ClipboardData(
+                                      text: '8810 7766 1234 9876'));
                                   ScaffoldMessenger.of(context).showSnackBar(
-                                    const SnackBar(content: Text('Berhasil menyalin!'))
-                                  );
+                                      const SnackBar(
+                                          content: Text('Berhasil menyalin!')));
                                 },
                                 child: const Row(
                                   children: [
@@ -188,22 +226,35 @@ class PaymentPage extends StatelessWidget {
               ),
               actions: [
                 TextButton(
-                    style: ButtonStyle(
-                      backgroundColor: MaterialStateProperty.all(Colors.blue),
+                  style: ButtonStyle(
+                    backgroundColor: MaterialStateProperty.all(Colors.blue),
+                  ),
+                  child: const Text(
+                    'Konfirmasi Pembayaran',
+                    style: TextStyle(
+                      color: Colors.white,
+                      fontWeight: FontWeight.bold,
+                      fontSize: 12,
                     ),
-                    child: const Center(
-                        child: Text(
-                      'Konfirmasi Pembayaran',
-                      style: TextStyle(
-                          color: Colors.white,
-                          fontWeight: FontWeight.bold,
-                          fontSize: 12),
-                    )),
-                    onPressed: () => Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                            builder: (context) =>
-                                PaymentStruckPage(ticketData: ticketData)))),
+                  ),
+                  onPressed: () async {
+                    // Tambahkan data ke Firestore
+                    await addInstance(
+                      ticketData['nama'],
+                      ticketData['tipe'],
+                      ticketData['stok'],
+                      ticketData['harga'].toString(),
+                      ticketData['id'],
+                    );
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) =>
+                            PaymentStruckPage(ticketData: ticketData),
+                      ),
+                    );
+                  },
+                ),
               ],
             ));
   }
@@ -255,22 +306,35 @@ class PaymentPage extends StatelessWidget {
                   )),
               actions: [
                 TextButton(
-                    style: ButtonStyle(
-                      backgroundColor: MaterialStateProperty.all(Colors.blue),
+                  style: ButtonStyle(
+                    backgroundColor: MaterialStateProperty.all(Colors.blue),
+                  ),
+                  child: const Text(
+                    'Konfirmasi Pembayaran',
+                    style: TextStyle(
+                      color: Colors.white,
+                      fontWeight: FontWeight.bold,
+                      fontSize: 12,
                     ),
-                    child: const Center(
-                        child: Text(
-                      'Konfirmasi Pembayaran',
-                      style: TextStyle(
-                          color: Colors.white,
-                          fontWeight: FontWeight.bold,
-                          fontSize: 12),
-                    )),
-                    onPressed: () => Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                            builder: (context) =>
-                                PaymentStruckPage(ticketData: ticketData)))),
+                  ),
+                  onPressed: () async {
+                    // Tambahkan data ke Firestore
+                    await addInstance(
+                      ticketData['nama'],
+                      ticketData['tipe'],
+                      ticketData['stok'],
+                      ticketData['harga'].toString(),
+                      ticketData['id'],
+                    );
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) =>
+                            PaymentStruckPage(ticketData: ticketData),
+                      ),
+                    );
+                  },
+                ),
               ],
             ));
   }
@@ -304,9 +368,9 @@ class PaymentPage extends StatelessWidget {
                 borderRadius: BorderRadius.circular(12),
                 boxShadow: [
                   BoxShadow(
-                    color: Colors.black.withOpacity(0.2), 
+                    color: Colors.black.withOpacity(0.2),
                     spreadRadius: 2,
-                    blurRadius: 10, 
+                    blurRadius: 10,
                     offset: const Offset(4, 4),
                   ),
                 ]),
@@ -384,7 +448,6 @@ class PaymentPage extends StatelessWidget {
               ],
             ),
           ),
-
           const SizedBox(height: 24),
           const Text(
             "Pilih Metode Pembayaran",
@@ -392,7 +455,6 @@ class PaymentPage extends StatelessWidget {
                 fontSize: 16, color: Colors.grey, fontWeight: FontWeight.bold),
           ),
           const SizedBox(height: 16),
-
           _buildPaymentOption(
             image: 'assets/images/i.png',
             text: "Tunai (Cash)",
@@ -411,7 +473,6 @@ class PaymentPage extends StatelessWidget {
             color: Colors.blue,
             onTap: () => qrPopUp(context),
           ),
-
           const SizedBox(height: 24),
           Column(
             crossAxisAlignment: CrossAxisAlignment.start,

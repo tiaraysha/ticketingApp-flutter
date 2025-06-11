@@ -36,6 +36,7 @@ class _TicketPageState extends State<TicketPage> {
                   Map<String, dynamic> data = document.data() as Map<String, dynamic>;
                   String nama = data['nama'];
                   String tipe = data['tipe'];
+                  String stok = data['stok'].toString();
                   String tanggal = data['tanggal'] ?? '';
                   String harga = data['harga'].toString();
 
@@ -67,7 +68,7 @@ class _TicketPageState extends State<TicketPage> {
                           ),
                           const SizedBox(height: 4),
                           Text(
-                            tipe,
+                            '$tipe - $stok',
                             style: TextStyle(
                               color: Colors.grey.shade600,
                             ),
